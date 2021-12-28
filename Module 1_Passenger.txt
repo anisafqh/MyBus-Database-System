@@ -1,0 +1,137 @@
+/*Table PASSENGER represents PASSENGER entity*/
+/*Table CARD_CATEGORY represents CATEGORY entity*/
+/*Table CARD represents CARD entity*/
+
+ALTER SESSION SET NLS_DATE_FORMAT = 'DD-MON-YY';
+
+/*Create Table PASSENGER*/
+CREATE TABLE PASSENGER(
+    PASSENGER_NAME          VARCHAR2(30)    NOT NULL,
+    PASSENGER_ID            VARCHAR(20)     NOT NULL,
+    PASSENGER_AGE           NUMBER(5,0)     NOT NULL,
+    PASSENGER_PHONENUMBER   CHAR(15)        NOT NULL,
+    PASSENGER_EMAIL         VARCHAR2(30)    NOT NULL,
+    PASSENGER_ADDRESS       VARCHAR2(40)    NOT NULL,
+    
+    CONSTRAINT PASS_PK PRIMARY KEY(PASSENGER_ID)
+);
+
+/*Create Table CARD_CATEGORY*/
+CREATE TABLE CARD_CATEGORY(
+    CATEGORY_ID             INTEGER         NOT NULL,
+    CATEGORY_TYPE           VARCHAR2(10)    NOT NULL,
+    
+    CONSTRAINT CAT_PK PRIMARY KEY(CATEGORY_ID)
+);
+
+/*Create Table CARD*/
+CREATE TABLE CARD(
+    CARD_ID                 INTEGER         NOT NULL,
+    CATEGORY_ID             INTEGER         NOT NULL,
+    CARD_STARTDATE          DATE            NOT NULL,
+    CARD_EXPIREDATE         DATE            NOT NULL,
+    CARD_BALANCE            NUMBER(10,2)    NOT NULL,
+    
+    CONSTRAINT CARD_PK PRIMARY KEY(CARD_ID)
+);
+
+ALTER TABLE CARD
+    ADD CONSTRAINT CAT_ID_FK FOREIGN KEY (CATEGORY_ID)
+    REFERENCES CARD_CATEGORY (CATEGORY_ID) ON DELETE CASCADE;
+
+/*Create Table PASSENGER_CATEGORY*/
+CREATE TABLE PASSENGER_CATEGORY(
+    PASSENGER_CATEGORY_ID             INTEGER         NOT NULL,
+    PASSENGER_ID                      VARCHAR2(20)    NOT NULL,
+    CARD_ID                           INTEGER         NOT NULL,
+    
+    CONSTRAINT PASS_CAT_PK PRIMARY KEY(PASSENGER_CATEGORY_ID),
+    CONSTRAINT PASS_ID_FK FOREIGN KEY (PASSENGER_ID)
+        REFERENCES PASSENGER (PASSENGER_ID) ON DELETE CASCADE,
+    CONSTRAINT CARD_ID_FK FOREIGN KEY (CARD_ID)
+        REFERENCES CARD (CARD_ID) ON DELETE CASCADE
+);
+
+/*Trigger to INSERT before each row*/
+CREATE OR REPLACE trigger "PASSENGER_NAME"
+ before insert on PASSENGER
+ for each row
+begin
+	if :NEW.PASSNAME is null then
+		select PASSENGER_NAME_SEQ.nextval into :NEW.PASSENGER_NAME from dual;
+	end if;
+end;
+
+/
+ALTER TRIGGER "PASSENGER_NAME" ENABLE
+/
+
+/*Trigger to INSERT before each row*/
+CREATE OR REPLACE trigger "PASSENGER_ID"
+ before insert on PASSENGER
+ for each row
+begin
+	if :NEW.PASSENGER_ID is null then
+		select PASSENGER_ID_SEQ.nextval into :NEW.PASSENGER_ID from dual;
+	end if;
+end;
+
+/
+ALTER TRIGGER "PASSENGER_ID" ENABLE
+/
+
+/*Trigger to INSERT before each row*/
+CREATE OR REPLACE trigger "PASSENGER_AGE"
+ before insert on PASSENGER
+ for each row
+begin
+	if :NEW.PASSENGER_AGE is null then
+		select PASSENGER_AGE_SEQ.nextval into :NEW.PASSENGER_AGE from dual;
+	end if;
+end;
+
+/
+ALTER TRIGGER "PASSENGER_AGE" ENABLE
+/
+
+/*Trigger to INSERT before each row*/
+CREATE OR REPLACE trigger "PASSENGER_PHONENUMBER"
+ before insert on PASSENGER
+ for each row
+begin
+	if :NEW.PASSENGER_PHONENUMBER is null then
+		select PASSENGER_PHONENUMBER_SEQ.nextval into :NEW.PASSENGER_PHONENUMBER from dual;
+	end if;
+end;
+
+/
+ALTER TRIGGER "PASSENGER_PHONENUMBER" ENABLE
+/
+
+/*Trigger to INSERT before each row*/
+CREATE OR REPLACE trigger "PASSENGER_EMAIL"
+ before insert on PASSENGER
+ for each row
+begin
+	if :NEW.PASSENGER_EMAIL is null then
+		select PASSENGER_EMAIL_SEQ.nextval into :NEW.PASSENGER_EMAIL from dual;
+	end if;
+end;
+
+/
+ALTER TRIGGER "PASSENGER_EMAIL" ENABLE
+/
+
+/*Trigger to INSERT before each row*/
+CREATE OR REPLACE trigger "PASSENGER_ADDRESS"
+ before insert on PASSENGER
+ for each row
+begin
+	if :NEW.PASSENGER_ADDRESS is null then
+		select PASSENGER_ADDRESS_SEQ.nextval into :NEW.PASSENGER_ADDRESS from dual;
+	end if;
+end;
+
+/
+ALTER TRIGGER "PASSENGER_ADDRESS" ENABLE
+/
